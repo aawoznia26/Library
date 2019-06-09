@@ -1,7 +1,8 @@
 package com.crud.kodillalibrary.controller;
 
 import com.crud.kodillalibrary.domain.*;
-import com.crud.kodillalibrary.mapper.RiderMapper;
+import com.crud.kodillalibrary.mapper.ReaderMapper;
+import com.crud.kodillalibrary.mapper.RentMapper;
 import com.crud.kodillalibrary.mapper.SpecimenMapper;
 import com.crud.kodillalibrary.mapper.TitleMapper;
 import com.crud.kodillalibrary.service.DbService;
@@ -22,21 +23,24 @@ public class LibraryControler {
     private SpecimenMapper specimenMapper;
 
     @Autowired
-    private RiderMapper riderMapper;
+    private ReaderMapper readerMapper;
+
+    @Autowired
+    private RentMapper rentMapper;
 
     @RequestMapping(method = RequestMethod.POST, value = "saveTitle")
-    public Title saveTitle(@RequestBody TitleDto titleDto) {
+    public int saveTitle(@RequestBody TitleDto titleDto) {
         return dbService.saveTitle(titleMapper.mapToTitle(titleDto));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "saveSpecimen")
-    public Specimen saveSpecimen(@RequestParam int titleId) {
+    public int saveSpecimen(@RequestParam int titleId){
         return dbService.saveSpecimen(titleId);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "saveRider")
-    public Rider saveRider(@RequestBody RiderDto riderDto) {
-        return dbService.saveRider(riderMapper.mapToRider(riderDto));
+    @RequestMapping(method = RequestMethod.POST, value = "saveReader")
+    public int saveReader(@RequestBody ReaderDto readerDto) {
+        return dbService.saveReader(readerMapper.mapToReader(readerDto));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "markSpecimenAsAvailable")
@@ -55,13 +59,13 @@ public class LibraryControler {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "rentBook")
-    public RiderSpecimen rentBook(@RequestBody RiderDto riderDto, @RequestParam int titleId) {
-        return dbService.rentBook(riderMapper.mapToRider(riderDto),titleId);
+    public RentDto rentBook(@RequestBody ReaderDto readerDto, @RequestParam int titleId) {
+        return rentMapper.mapToRentDto(dbService.rentBook(readerMapper.mapToReader(readerDto),titleId));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "returnBook")
-    public RiderSpecimen returnBook(@RequestParam int rentId) {
-        return dbService.returnBook(rentId);
+    public RentDto returnBook(@RequestParam int rentId) {
+        return rentMapper.mapToRentDto(dbService.returnBook(rentId));
     }
 
 }

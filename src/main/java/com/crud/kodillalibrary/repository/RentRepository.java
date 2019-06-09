@@ -1,6 +1,6 @@
 package com.crud.kodillalibrary.repository;
 
-import com.crud.kodillalibrary.domain.RiderSpecimen;
+import com.crud.kodillalibrary.domain.Rent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,5 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public interface RiderSpecimenRepository extends JpaRepository<RiderSpecimen, Integer> {
+public interface RentRepository extends JpaRepository<Rent, Integer> {
+
+   Rent findFirstByReaderIdAndSpecimenId (int readerId, int specimenId);
 }

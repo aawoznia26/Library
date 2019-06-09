@@ -2,51 +2,51 @@ package com.crud.kodillalibrary.service;
 
 
 import com.crud.kodillalibrary.domain.*;
-import com.crud.kodillalibrary.repository.RiderRepository;
-import com.crud.kodillalibrary.repository.RiderSpecimenRepository;
+import com.crud.kodillalibrary.repository.ReaderRepository;
+import com.crud.kodillalibrary.repository.RentRepository;
 import com.crud.kodillalibrary.repository.SpecimenRepository;
 import com.crud.kodillalibrary.repository.TitleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Slf4j
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class DbService {
 
-    private final RiderRepository riderRepository;
+    private final ReaderRepository readerRepository;
 
     private final SpecimenRepository specimenRepository;
 
     private final TitleRepository titleRepository;
 
-    private final RiderSpecimenRepository riderSpecimenRepository;
+    private final RentRepository rentRepository;
 
-    public Title saveTitle(final Title title) {
+    public int saveTitle(final Title title) {
         Specimen specimenSavedWithTitle = new Specimen(SpecimenStatus.AVAILABLE);
         title.getSpecimens().add(specimenSavedWithTitle);
         specimenSavedWithTitle.setTitle(title);
         specimenRepository.save(specimenSavedWithTitle);
-        return titleRepository.save(title);
+        return titleRepository.save(title).getId();
     }
 
-    public Rider saveRider(final Rider rider) {
+    public int saveReader(final Reader reader) {
         String uuid = UUID.randomUUID().toString();
-        rider.setUuid(uuid);
-        return riderRepository.save(rider);
+        reader.setUuid(uuid);
+        return readerRepository.save(reader).getId();
     }
 
-    public Specimen saveSpecimen(final int titleId){
+    public int saveSpecimen(final int titleId){
         Title titleToAssignSpecimen = titleRepository.getOne(titleId);
-        Specimen newSpecimen = new Specimen(SpecimenStatus.RENT);
+        Specimen newSpecimen = new Specimen(SpecimenStatus.AVAILABLE);
         newSpecimen.setTitle(titleToAssignSpecimen);
-        return specimenRepository.save(newSpecimen);
+        titleToAssignSpecimen.getSpecimens().add(newSpecimen);
+        return specimenRepository.save(newSpecimen).getId();
     }
 
     public Specimen markSpecimenAsAvailable (final int specimenId) {
@@ -66,31 +66,31 @@ public class DbService {
 
     }
 
-    public RiderSpecimen rentBook(final Rider rider, final int titleId){
-        Rider foundRider = riderRepository.findFirstByUuid(rider.getUuid());
+    public Rent rentBook(final Reader reader, final int titleId){
+        Reader foundReader = readerRepository.findFirstByUuid(reader.getUuid());
         Specimen foundSpecimen = specimenRepository.findFirstByStatusAndTitle_Id(SpecimenStatus.AVAILABLE, titleId);
 
-        RiderSpecimen riderSpecimen = new RiderSpecimen(foundRider, foundSpecimen, LocalDate.now());
+        Rent rent = new Rent(foundReader, foundSpecimen, LocalDate.now(), null);
 
         foundSpecimen.setStatus(SpecimenStatus.RENT);
-        foundRider.getSpecimen().add(riderSpecimen);
-        foundSpecimen.getRider().add(riderSpecimen);
+        foundReader.getSpecimen().add(rent);
+        foundSpecimen.getReader().add(rent);
 
         specimenRepository.save(foundSpecimen);
-        riderRepository.save(foundRider);
-        return riderSpecimenRepository.save(riderSpecimen);
+        readerRepository.save(foundReader);
+        return rentRepository.save(rent);
 
     }
 
-    public RiderSpecimen returnBook(final int riderSpecimenId){
-        RiderSpecimen foundRiderSpecimen = riderSpecimenRepository.getOne(riderSpecimenId);
-        foundRiderSpecimen.setBookReturnDate(LocalDate.now());
+    public Rent returnBook(final int rentId){
+        Rent foundRent = rentRepository.getOne(rentId);
+        foundRent.setBookReturnDate(LocalDate.now());
 
-        Specimen foundSpecimen = foundRiderSpecimen.getSpecimen();
+        Specimen foundSpecimen = foundRent.getSpecimen();
         foundSpecimen.setStatus(SpecimenStatus.AVAILABLE);
 
         specimenRepository.save(foundSpecimen);
-        return riderSpecimenRepository.save(foundRiderSpecimen);
+        return rentRepository.save(foundRent);
     }
 
 }

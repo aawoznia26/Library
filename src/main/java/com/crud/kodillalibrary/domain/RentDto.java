@@ -9,10 +9,10 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RiderSpecimenDto {
+public class RentDto {
 
     private int id;
-    private Rider rider;
+    private Reader reader;
     private Specimen specimen;
     private LocalDate rentDate;
     private LocalDate bookReturnDate;

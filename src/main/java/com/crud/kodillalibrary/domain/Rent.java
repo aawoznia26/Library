@@ -1,7 +1,6 @@
 package com.crud.kodillalibrary.domain;
 
 
-import com.crud.kodillalibrary.mapper.LocalDateAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(uniqueConstraints= @UniqueConstraint(columnNames={"rider_id", "specimen_id"}))
-public class RiderSpecimen implements Serializable {
+public class Rent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,25 +26,22 @@ public class RiderSpecimen implements Serializable {
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "rider_id")
-    private Rider rider;
+    private Reader reader;
 
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "specimen_id")
     private Specimen specimen;
 
-    @Column
-    @Convert(converter = LocalDateAttributeConverter.class)
     private LocalDate rentDate;
 
-    @Column
-    @Convert(converter = LocalDateAttributeConverter.class)
     private LocalDate bookReturnDate;
 
-    public RiderSpecimen(Rider rider, Specimen specimen, LocalDate rentDate) {
-        this.rider = rider;
+    public Rent(Reader reader, Specimen specimen, LocalDate rentDate, LocalDate bookReturnDate) {
+        this.reader = reader;
         this.specimen = specimen;
         this.rentDate = rentDate;
+        this.bookReturnDate = bookReturnDate;
     }
 
     public void setBookReturnDate(LocalDate bookReturnDate) {

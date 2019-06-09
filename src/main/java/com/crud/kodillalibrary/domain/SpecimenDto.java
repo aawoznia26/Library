@@ -1,6 +1,7 @@
 package com.crud.kodillalibrary.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,7 @@ public class SpecimenDto {
     private int id;
     private Title title;
     private SpecimenStatus status;
-    private Set<RiderSpecimen> rider = new HashSet<>();
+    private Set<Rent> rider = new HashSet<>();
 
     public SpecimenDto(SpecimenStatus status) {
         this.status = status;

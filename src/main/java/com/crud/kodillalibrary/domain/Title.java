@@ -21,13 +21,10 @@ public class Title {
     @Column(unique = true)
     private int id;
 
-    @Column
     private String title;
 
-    @Column
     private String author;
 
-    @Column
     private int publicationYear;
 
     @OneToMany(targetEntity = Specimen.class, mappedBy = "title", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)

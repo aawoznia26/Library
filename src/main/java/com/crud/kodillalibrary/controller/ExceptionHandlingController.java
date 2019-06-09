@@ -17,21 +17,21 @@ public class ExceptionHandlingController {
     @ExceptionHandler(NullPointerException.class)
     public final String handleNullPointerException(NullPointerException e) {
         log.error(e.getMessage(), e);
-        return "That object does not exist";
+        return "Object that you refer to does not exist. Check if provided data are correct.";
 
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public final String handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.error(e.getMessage(), e);
-        return "The rider has already rent that book";
+        return "Object data format does not match specified format. Check specification and try again";
 
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public final String handleEntityNotFoundException(EntityNotFoundException e) {
         log.error(e.getMessage(), e);
-        return "That object does not exist";
+        return "Object that you refer to does not exist. Check if provided data are correct.";
 
     }
 }

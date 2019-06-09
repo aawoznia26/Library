@@ -21,18 +21,17 @@ public class Specimen {
     @Column(unique = true)
     private int id;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "TITLE_ID")
     @JsonIgnore
     private Title title;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private SpecimenStatus status;
 
     @JsonIgnore
-    @OneToMany(targetEntity = RiderSpecimen.class, mappedBy = "rider", fetch=FetchType.LAZY)
-    private Set<RiderSpecimen> rider = new HashSet<>();
+    @OneToMany(targetEntity = Rent.class, mappedBy = "reader", fetch=FetchType.LAZY)
+    private Set<Rent> reader = new HashSet<>();
 
     public Specimen(SpecimenStatus status) {
         this.status = status;

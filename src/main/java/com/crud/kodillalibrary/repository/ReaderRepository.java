@@ -1,13 +1,13 @@
 package com.crud.kodillalibrary.repository;
 
-import com.crud.kodillalibrary.domain.Rider;
+import com.crud.kodillalibrary.domain.Reader;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public interface RiderRepository extends JpaRepository<Rider, Integer> {
+public interface ReaderRepository extends JpaRepository<Reader, Integer> {
 
-    Rider findFirstByUuid (String uuid);
+    Reader findFirstByUuid (String uuid);
 }
