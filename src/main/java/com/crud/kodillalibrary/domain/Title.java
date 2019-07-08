@@ -17,9 +17,8 @@ public class Title {
 
     @Id
     @GeneratedValue
-    @NotNull
-    @Column(unique = true)
-    private int id;
+    @Column(unique = true, nullable = false)
+    private Long id;
 
     private String title;
 

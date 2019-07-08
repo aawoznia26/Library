@@ -1,17 +1,17 @@
 package com.crud.kodillalibrary.domain;
 
 
+import com.crud.kodillalibrary.dto.ReaderDto;
+import com.crud.kodillalibrary.mapper.LocalDateAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
 
 @Getter
 @NoArgsConstructor
@@ -20,9 +20,8 @@ public class Reader {
 
     @Id
     @GeneratedValue
-    @NotNull
-    @Column(unique = true)
-    private int id;
+    @Column(unique = true, nullable = false)
+    private Long id;
 
     private String name;
 
@@ -31,6 +30,7 @@ public class Reader {
     @GeneratedValue
     private String uuid;
 
+    @Convert(converter = LocalDateAttributeConverter.class)
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate enrollmentDate;
 
@@ -47,5 +47,18 @@ public class Reader {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public static ReaderDto mapToReaderDto(final Reader reader) {
+        ReaderDto readerDto = new ReaderDto(
+                reader.getName(),
+                reader.getLastName(),
+                reader.getEnrollmentDate()
+        );
+        if(reader.getUuid() != null) {
+            readerDto.setUuid(reader.getUuid());
+        }
+
+        return readerDto;
     }
 }

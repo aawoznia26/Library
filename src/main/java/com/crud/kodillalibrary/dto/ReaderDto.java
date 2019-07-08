@@ -1,5 +1,7 @@
-package com.crud.kodillalibrary.domain;
+package com.crud.kodillalibrary.dto;
 
+import com.crud.kodillalibrary.domain.Reader;
+import com.crud.kodillalibrary.domain.Rent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class ReaderDto {
 
-    private int id;
+    private Long id;
     private String name;
     private String lastName;
     private String uuid;
@@ -27,5 +29,17 @@ public class ReaderDto {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public static Reader mapToReader(final ReaderDto readerDto) {
+        Reader reader = new Reader(
+                readerDto.getName(),
+                readerDto.getLastName(),
+                readerDto.getEnrollmentDate()
+        );
+        if(readerDto.getUuid() != null) {
+            reader.setUuid(readerDto.getUuid());
+        }
+        return reader;
     }
 }

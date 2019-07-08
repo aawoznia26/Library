@@ -1,12 +1,12 @@
 package com.crud.kodillalibrary.domain;
 
 
+import com.crud.kodillalibrary.dto.RentDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -18,10 +18,9 @@ import java.time.LocalDate;
 public class Rent implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @NotNull
-    @Column(unique = true)
-    private int id;
+    @GeneratedValue
+    @Column(unique = true, nullable = false)
+    private Long id;
 
     @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
@@ -46,5 +45,17 @@ public class Rent implements Serializable {
 
     public void setBookReturnDate(LocalDate bookReturnDate) {
         this.bookReturnDate = bookReturnDate;
+    }
+
+    public static RentDto mapToRentDto(final Rent rent) {
+        RentDto rentDto = new RentDto(
+                rent.getId(),
+                rent.getReader(),
+                rent.getSpecimen(),
+                rent.getRentDate(),
+                rent.getBookReturnDate()
+        );
+
+        return rentDto;
     }
 }

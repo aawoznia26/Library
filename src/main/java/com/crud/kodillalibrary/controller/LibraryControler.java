@@ -1,11 +1,14 @@
 package com.crud.kodillalibrary.controller;
 
-import com.crud.kodillalibrary.domain.*;
-import com.crud.kodillalibrary.mapper.ReaderMapper;
-import com.crud.kodillalibrary.mapper.RentMapper;
-import com.crud.kodillalibrary.mapper.SpecimenMapper;
-import com.crud.kodillalibrary.mapper.TitleMapper;
-import com.crud.kodillalibrary.service.DbService;
+import com.crud.kodillalibrary.domain.Rent;
+import com.crud.kodillalibrary.domain.Specimen;
+import com.crud.kodillalibrary.dto.ReaderDto;
+import com.crud.kodillalibrary.dto.RentDto;
+import com.crud.kodillalibrary.dto.SpecimenDto;
+import com.crud.kodillalibrary.dto.TitleDto;
+import com.crud.kodillalibrary.service.ReaderService;
+import com.crud.kodillalibrary.service.RentService;
+import com.crud.kodillalibrary.service.TitleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,58 +17,52 @@ import org.springframework.web.bind.annotation.*;
 public class LibraryControler {
 
     @Autowired
-    private DbService dbService;
+    private RentService rentService;
 
     @Autowired
-    private TitleMapper titleMapper;
+    private TitleService titleService;
 
     @Autowired
-    private SpecimenMapper specimenMapper;
-
-    @Autowired
-    private ReaderMapper readerMapper;
-
-    @Autowired
-    private RentMapper rentMapper;
+    private ReaderService readerService;
 
     @RequestMapping(method = RequestMethod.POST, value = "saveTitle")
-    public int saveTitle(@RequestBody TitleDto titleDto) {
-        return dbService.saveTitle(titleMapper.mapToTitle(titleDto));
+    public Long saveTitle(@RequestBody TitleDto titleDto) {
+        return titleService.saveTitle(TitleDto.mapToTitle(titleDto));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "saveSpecimen")
-    public int saveSpecimen(@RequestParam int titleId){
-        return dbService.saveSpecimen(titleId);
+    public Long saveSpecimen(@RequestBody SpecimenDto specimenDto){
+        return titleService.saveSpecimen(specimenDto.mapToSpecimen());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "saveReader")
-    public int saveReader(@RequestBody ReaderDto readerDto) {
-        return dbService.saveReader(readerMapper.mapToReader(readerDto));
+    public Long saveReader(@RequestBody ReaderDto readerDto) {
+        return readerService.saveReader(ReaderDto.mapToReader(readerDto));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "markSpecimenAsAvailable")
-    public SpecimenDto markSpecimenAsAvailable(@RequestParam int specimenId) {
-        return specimenMapper.mapToSpecimenDto(dbService.markSpecimenAsAvailable(specimenId));
+    public SpecimenDto markSpecimenAsAvailable(@RequestParam Long specimenId) {
+        return Specimen.mapToSpecimenDto(titleService.markSpecimenAsAvailable(specimenId));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "markSpecimenAsRent")
-    public SpecimenDto markSpecimenAsRent(@RequestParam int specimenId) {
-        return specimenMapper.mapToSpecimenDto(dbService.markSpecimenAsRent(specimenId));
+    public SpecimenDto markSpecimenAsRent(@RequestParam Long specimenId) {
+        return Specimen.mapToSpecimenDto(titleService.markSpecimenAsRent(specimenId));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "getAvailableSpecimensCount")
-    public int getAvailableSpecimensCount(@RequestParam int titleId) {
-        return dbService.getAvailableSpecimensCount(titleId);
+    public Long getAvailableSpecimensCount(@RequestParam Long titleId) {
+        return titleService.getAvailableSpecimensCount(titleId);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "rentBook")
-    public RentDto rentBook(@RequestBody ReaderDto readerDto, @RequestParam int titleId) {
-        return rentMapper.mapToRentDto(dbService.rentBook(readerMapper.mapToReader(readerDto),titleId));
+    @RequestMapping(method = RequestMethod.POST, value = "/rentBook/{titleId}")
+    public RentDto rentBook(@RequestBody ReaderDto readerDto, @PathVariable Long titleId) {
+        return Rent.mapToRentDto(rentService.rentBook(ReaderDto.mapToReader(readerDto),titleId));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "returnBook")
-    public RentDto returnBook(@RequestParam int rentId) {
-        return rentMapper.mapToRentDto(dbService.returnBook(rentId));
+    public RentDto returnBook(@RequestParam Long rentId) {
+        return Rent.mapToRentDto(rentService.returnBook(rentId));
     }
 
 }

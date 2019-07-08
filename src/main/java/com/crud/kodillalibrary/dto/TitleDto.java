@@ -1,5 +1,7 @@
-package com.crud.kodillalibrary.domain;
+package com.crud.kodillalibrary.dto;
 
+import com.crud.kodillalibrary.domain.Specimen;
+import com.crud.kodillalibrary.domain.Title;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TitleDto {
 
-    private int id;
+    private Long id;
     private String title;
     private String author;
     private int publicationYear;
@@ -20,6 +22,14 @@ public class TitleDto {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
+    }
+
+    public static Title mapToTitle(final TitleDto titleDto) {
+        return new Title(
+                titleDto.getTitle(),
+                titleDto.getAuthor(),
+                titleDto.getPublicationYear()
+        );
     }
 }
 

@@ -5,14 +5,12 @@ import com.crud.kodillalibrary.domain.Specimen;
 import com.crud.kodillalibrary.domain.SpecimenStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Repository
-public interface SpecimenRepository extends JpaRepository<Specimen, Integer> {
+public interface SpecimenRepository extends JpaRepository<Specimen, Long> {
 
-    int countAllByTitleIdAndStatus(int titleId, SpecimenStatus status);
+    Long countAllByTitleIdAndStatus(Long titleId, SpecimenStatus status);
 
-    Specimen findFirstByStatusAndTitle_Id(SpecimenStatus status, int titleId);
+    Specimen findFirstByStatusAndTitle_Id(SpecimenStatus status, Long titleId);
 }
 

@@ -1,11 +1,11 @@
 package com.crud.kodillalibrary.domain;
 
+import com.crud.kodillalibrary.dto.SpecimenDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,13 +17,11 @@ public class Specimen {
 
     @Id
     @GeneratedValue
-    @NotNull
-    @Column(unique = true)
-    private int id;
+    @Column(unique = true, nullable = false)
+    private Long id;
 
     @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "TITLE_ID")
-    @JsonIgnore
     private Title title;
 
     @Enumerated(EnumType.STRING)
@@ -32,6 +30,11 @@ public class Specimen {
     @JsonIgnore
     @OneToMany(targetEntity = Rent.class, mappedBy = "reader", fetch=FetchType.LAZY)
     private Set<Rent> reader = new HashSet<>();
+
+    public Specimen(Title title, SpecimenStatus status) {
+        this.title = title;
+        this.status = status;
+    }
 
     public Specimen(SpecimenStatus status) {
         this.status = status;
@@ -43,5 +46,16 @@ public class Specimen {
 
     public void setStatus(SpecimenStatus status) {
         this.status = status;
+    }
+
+    public static SpecimenDto mapToSpecimenDto(final Specimen specimen) {
+        SpecimenDto specimenDto = new SpecimenDto(
+                specimen.getTitle().getId(),
+                specimen.getStatus()
+        );
+        specimenDto.setId(specimen.getId());
+        specimenDto.setReader(specimen.getReader());
+
+        return specimenDto;
     }
 }

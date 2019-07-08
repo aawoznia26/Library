@@ -1,12 +1,9 @@
 package com.crud.kodillalibrary.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @RestController
@@ -14,24 +11,19 @@ import javax.persistence.EntityNotFoundException;
 public class ExceptionHandlingController {
 
 
-    @ExceptionHandler(NullPointerException.class)
-    public final String handleNullPointerException(NullPointerException e) {
+    @ExceptionHandler(Exception.class)
+    public final String handleException(Exception e) {
         log.error(e.getMessage(), e);
-        return "Object that you refer to does not exist. Check if provided data are correct.";
+        return "Object that you refer to does not exist or provided data format is incorrect. Check if provided data, specification and try again.";
 
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public final String handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+    @ExceptionHandler(RuntimeException.class)
+    public final String handleRuntimeException(RuntimeException e) {
         log.error(e.getMessage(), e);
-        return "Object data format does not match specified format. Check specification and try again";
+        return "Object that you refer to does not exist or provided data format is incorrect. Check if provided data, specification and try again.";
 
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public final String handleEntityNotFoundException(EntityNotFoundException e) {
-        log.error(e.getMessage(), e);
-        return "Object that you refer to does not exist. Check if provided data are correct.";
 
-    }
 }
