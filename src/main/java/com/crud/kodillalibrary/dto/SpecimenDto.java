@@ -18,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class SpecimenDto {
 
+    @Autowired
     private TitleRepository titleRepository;
 
     private Long id;
