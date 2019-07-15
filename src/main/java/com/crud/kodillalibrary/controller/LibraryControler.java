@@ -32,7 +32,7 @@ public class LibraryControler {
 
     @RequestMapping(method = RequestMethod.POST, value = "saveSpecimen")
     public Long saveSpecimen(@RequestBody SpecimenDto specimenDto){
-        return titleService.saveSpecimen(specimenDto.mapToSpecimen(specimenDto));
+        return titleService.saveSpecimen(titleService.mapToSpecimen(specimenDto));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "saveReader")

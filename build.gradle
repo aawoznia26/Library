@@ -35,7 +35,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.6'
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4")
     runtimeOnly('com.h2database:h2')
-
+    compile 'org.hibernate:hibernate-java8'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 

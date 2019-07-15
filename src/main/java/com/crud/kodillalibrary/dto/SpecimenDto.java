@@ -18,9 +18,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class SpecimenDto {
 
-    @Autowired
-    private TitleRepository titleRepository;
-
     private Long id;
     private Long titleId;
     private SpecimenStatus status;
@@ -39,13 +36,5 @@ public class SpecimenDto {
         this.reader = reader;
     }
 
-    public Specimen mapToSpecimen(SpecimenDto specimenDto) {
-        Long id = specimenDto.getTitleId();
-        Title title = titleRepository.findOne(id);
-        return new Specimen(
-                title,
-                specimenDto.getStatus()
-        );
-    }
 
 }

@@ -30,7 +30,7 @@ public class Reader {
     @GeneratedValue
     private String uuid;
 
-    @Convert(converter = LocalDateAttributeConverter.class)
+    //@Convert(converter = LocalDateAttributeConverter.class)
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate enrollmentDate;
 

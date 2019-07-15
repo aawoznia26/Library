@@ -4,6 +4,7 @@ package com.crud.kodillalibrary.service;
 import com.crud.kodillalibrary.domain.Specimen;
 import com.crud.kodillalibrary.domain.SpecimenStatus;
 import com.crud.kodillalibrary.domain.Title;
+import com.crud.kodillalibrary.dto.SpecimenDto;
 import com.crud.kodillalibrary.repository.SpecimenRepository;
 import com.crud.kodillalibrary.repository.TitleRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,14 @@ public class TitleService {
     public Long saveSpecimen(final Specimen specimen){
         Specimen newSpecimen = new Specimen(specimen.getTitle(), SpecimenStatus.AVAILABLE);
         return specimenRepository.save(newSpecimen).getId();
+    }
+
+    public Specimen mapToSpecimen(SpecimenDto specimenDto) {
+        Long id = specimenDto.getTitleId();
+        Title title = titleRepository.findOne(id);
+        return new Specimen(
+                title,
+                specimenDto.getStatus()
+        );
     }
 }
